@@ -1,5 +1,5 @@
-let interviewList = [{name: "rahim"},];
-let rejectedList = [{id:1}, {age: 12}];
+let interviewList = [];
+let rejectedList = [];
 
 // update the counts
 // catch every count first
@@ -10,7 +10,8 @@ let rejectedCount = document.getElementById("rejected-count")
 // catch allCardsContainer
 let allJobCards = document.getElementById("all-job-cards")
 
-// catch the buttons of job Cards
+// catch the filteredCardSection
+const filteredCardSection = document.getElementById("filteredCardSection")
 
 
 
@@ -26,9 +27,92 @@ calculateCount();
 // event deligate and catch the event
 allJobCards.addEventListener("click", function(event){
     if(event.target.classList.contains('interview-btn')){
-        console.log("yeah interview clicked");
+        const parentNode = event.target.parentNode.parentNode;
+
+        // take the elements and make a object
+        const company = parentNode.querySelector(".company").innerText;
+        const jobTitle = parentNode.querySelector(".job-title").innerText;
+        const location = parentNode.querySelector(".location").innerText;
+        const duration = parentNode.querySelector(".duration").innerText;
+        const salary = parentNode.querySelector(".salary").innerText;
+        let status = parentNode.querySelector(".job-status").innerText;
+        const description = parentNode.querySelector(".description").innerText;
+
+        // make object
+        const cardObject = {
+            company: company,
+            jobTitle: jobTitle,
+            location: location,
+            duration: duration,
+            status: status,
+            description: description,
+        }
+        console.log(cardObject);
+        // need some work here need check
+
+        // push the cardObject to the inteviewList
+        interviewList.push(cardObject);
+        createInterviewRender()
+        calculateCount();
     }
     else{
         alert('sorry not it')
     }
 })
+
+
+
+// html file create render for keeping the cards in the filtered section
+function createInterviewRender(){
+    // initially nothing here
+    filteredCardSection.innerHTML = "";
+    for(let interview of interviewList){
+        console.log(interview);
+
+        let card = document.createElement("div")
+        card.innerHTML =  `
+        <div class="w-11/12 mx-auto bg-red-300 rounded-xl shadow-md p-6 border border-gray-200 relative">
+        
+        <!-- delete icon -->
+        <button class="btn btn-circle absolute top-4 right-4 text-gray-400 hover:text-gray-700">
+        <i class="fa-solid fa-trash-can"></i>
+        </button>
+        
+        <!-- Job Name -->
+        <h2 class="company text-lg font-semibold text-[#002C5C]">${interview.company}</h2>
+        <p class="job-title text-sm font-bold text-gray-500">${interview.jobTitle}</p>
+
+        <!-- location and Salary -->
+        <ul class="font-medium text-sm text-gray-500 my-4 flex gap-8">
+            <li class="location">${interview.location}</li>
+            <li class="duration list-disc">${interview.duration}</li>
+            <li class="salary list-disc">${interview.salary}</li>
+        </ul>
+
+        <!-- Status -->
+        <span class="job-status inline-block bg-gray-200 text-gray-600 text-xs font-semibold px-3 py-2 rounded-md mt-3">${interview.status}</span>
+
+        <!-- Description -->
+        <p class="description text-sm text-gray-600 mt-3">${interview.description}</p>
+
+        <!-- Buttons -->
+        <div class="flex gap-3 mt-4">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+            INTERVIEW
+        </button>
+
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+            REJECTED
+        </button>
+        </div>
+    </div>
+        `
+
+        // append child the div tho the filteredCardSection
+    filteredCardSection.appendChild(card)
+
+    }
+    }
+
+    
+
