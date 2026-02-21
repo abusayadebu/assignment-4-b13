@@ -29,27 +29,27 @@
          <section class="my-8">
             <h2 class="text-2xl font-extrabold text-[#002C5C] my-5">Job Application Tracker</h2>
 
-            <!-- cards -->
+            <!-- Counter cards -->
             <div class="flex gap-5 justify-between grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
              <!-- counterCard -1 -->
             <div class="card bg-base-100 card-xs shadow-sm">
             <div class="card-body">
                 <p class="text-lg">Total</p>
-                <h2 class="card-title text-2xl text-[#002C5C] font-bold">0</h2>
+                <h2 id="total-count" class="card-title text-2xl text-[#002C5C] font-bold">0</h2>
             </div>
             </div>
              <!-- counterCard -2 -->
             <div class="card bg-base-100 card-xs shadow-sm">
             <div class="card-body">
                 <p class="text-lg">Interview</p>
-                <h2 class="card-title text-2xl text-green-400 font-bold">0</h2>
+                <h2 id="interview-count" class="card-title text-2xl text-green-400 font-bold">0</h2>
             </div>
             </div>
              <!-- counterCard -3 -->
             <div class="card bg-base-100 card-xs shadow-sm">
             <div class="card-body">
                 <p class="text-lg">Rejected</p>
-                <h2 class="card-title text-2xl text-red-400 font-bold">0</h2>
+                <h2 id="rejected-count" class="card-title text-2xl text-red-400 font-bold">0</h2>
             </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
     </section>
         
         <!-- job cards container -->
-        <section class="max-w-11/12 mx-auto space-y-6">
+        <section id="all-job-cards" class="max-w-11/12 mx-auto space-y-6">
             <!-- job card- 1 -->
         <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200 relative">
         
@@ -105,11 +105,11 @@
 
         <!-- Buttons -->
         <div class="flex gap-3 mt-4">
-        <button class="border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
             INTERVIEW
         </button>
 
-        <button class="border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
             REJECTED
         </button>
         </div>
@@ -143,11 +143,11 @@
 
         <!-- Buttons -->
         <div class="flex gap-3 mt-4">
-        <button class="border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
             INTERVIEW
         </button>
 
-        <button class="border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
             REJECTED
         </button>
         </div>
@@ -181,11 +181,11 @@
 
         <!-- Buttons -->
         <div class="flex gap-3 mt-4">
-        <button class="border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
             INTERVIEW
         </button>
 
-        <button class="border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
             REJECTED
         </button>
         </div>
@@ -219,11 +219,11 @@
 
         <!-- Buttons -->
         <div class="flex gap-3 mt-4">
-        <button class="border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
             INTERVIEW
         </button>
 
-        <button class="border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
             REJECTED
         </button>
         </div>
@@ -257,11 +257,11 @@
 
         <!-- Buttons -->
         <div class="flex gap-3 mt-4">
-        <button class="border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
             INTERVIEW
         </button>
 
-        <button class="border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
             REJECTED
         </button>
         </div>
@@ -295,11 +295,11 @@
 
         <!-- Buttons -->
         <div class="flex gap-3 mt-4">
-        <button class="border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
             INTERVIEW
         </button>
 
-        <button class="border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
             REJECTED
         </button>
         </div>
@@ -333,11 +333,11 @@
 
         <!-- Buttons -->
         <div class="flex gap-3 mt-4">
-        <button class="border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
             INTERVIEW
         </button>
 
-        <button class="border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
             REJECTED
         </button>
         </div>
@@ -371,11 +371,11 @@
 
         <!-- Buttons -->
         <div class="flex gap-3 mt-4">
-        <button class="border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
             INTERVIEW
         </button>
 
-        <button class="border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
             REJECTED
         </button>
         </div>
