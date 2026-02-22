@@ -10,8 +10,10 @@ let rejectedCount = document.getElementById("rejected-count")
 // catch allCardsContainer
 let allJobCards = document.getElementById("all-job-cards")
 
-// catch the filteredCardSection
-const filteredCardSection = document.getElementById("filteredCardSection")
+// catch the filteredInterviewCardSection
+const filteredInterviewCardSection = document.getElementById("filteredInterviewCardSection")
+// catch filteredRejectedCardSection
+const filteredRejectedCardSection = document.getElementById("filteredRejectedCardSection")
 // no-card section catch
 const noCardSection = document.getElementById("no-card-section")
 let totalJobs = document.getElementById("total-jobs")
@@ -44,91 +46,129 @@ function toggleFilterBtn(id){
     if(selectedBtn){
         selectedBtn.classList.add("bg-blue-600", "text-white")
     }
+
+    // hide all section first
+    allJobCards.classList.add("hidden");
+    filteredInterviewCardSection.classList.add("hidden");
+    filteredRejectedCardSection.classList.add("hidden");
+    noCardSection.classList.add("hidden");
+
+    
     if(id == "all-filter-btn"){
-        // hide interview cards
-        filteredCardSection.classList.add("hidden")
-        allJobCards.classList.remove("hidden")
-        totalJobs.innerText = `${allJobCards.children.length} jobs`;
+        allJobCards.classList.remove("hidden");
+        totalJobs.innerText = `${allJobCards.children.length} Jobs`;
 
     }
 
     // interview filter btn show the interview cards
     if(id == "interview-filter-btn"){
-        // hide all jobs container
-        allJobCards.classList.add("hidden")
-        
-        // if interviewList.length 0, then show no interview
         if(interviewList.length == 0){
             noCardSection.classList.remove("hidden")
-            // initially interview 0
-            totalJobs.innerText = `${interviewList.length} of ${allJobCards.children.length} Jobs`;
-        }
-        else if(interviewList.length > 0){
-            noCardSection.classList.add("hidden")
-             // show filterd card section
-        filteredCardSection.classList.remove("hidden")
-        // initially interview 0
+        }else{
+            filteredInterviewCardSection.classList.remove("hidden")
+        } 
         totalJobs.innerText = `${interviewList.length} of ${allJobCards.children.length} Jobs`;
+
+    }
+
+    // rejected filter btn
+    if(id == "rejected-filter-btn"){
+        if(rejectedList.length == 0){
+            noCardSection.classList.remove("hidden")
+        } 
+        else{
+            filteredRejectedCardSection.classList.remove("hidden")
         }
-       
+
+        totalJobs.innerText = `${rejectedList.length} of ${allJobCards.children.length} Jobs`
     }
     
 }
 
 
 // event deligate and catch the event
-allJobCards.addEventListener("click", function(event){
-    if(event.target.classList.contains('interview-btn')){
-        const parentNode = event.target.parentNode.parentNode;
+allJobCards.addEventListener("click", function(event) {
+    const parentNode = event.target.closest(".bg-white");
+    if (!parentNode) return;
 
-        // take the elements and make a object
-        const company = parentNode.querySelector(".company").innerText;
-        const jobTitle = parentNode.querySelector(".job-title").innerText;
-        const location = parentNode.querySelector(".location").innerText;
-        const duration = parentNode.querySelector(".duration").innerText;
-        const salary = parentNode.querySelector(".salary").innerText;
-        let status = parentNode.querySelector(".job-status").innerText;
-        const description = parentNode.querySelector(".description").innerText;
-        const jobStatus = "Applied"
+    const jobId = parentNode.id; // unique ID of the card
 
-        // make object
-        const cardObject = {
-            company: company,
-            jobTitle: jobTitle,
-            location: location,
-            duration: duration,
-            salary: salary,
-            status: jobStatus,
-            description: description,
-        }
-        console.log(cardObject);
-        // check already job object exsit or not
-        const interviewExist = interviewList.find(item => item.company == cardObject.company)
+    const status = parentNode.querySelector(".job-status");
+    const company = parentNode.querySelector(".company").innerText;
+    const jobTitle = parentNode.querySelector(".job-title").innerText;
+    const location = parentNode.querySelector(".location").innerText;
+    const duration = parentNode.querySelector(".duration").innerText;
+    const salary = parentNode.querySelector(".salary").innerText;
+    const description = parentNode.querySelector(".description").innerText;
 
-        if(!interviewExist){
+    // get the interview btn
+    if (event.target.classList.contains("interview-btn")) {
+        status.innerText = "Interview";
+        status.className = "job-status inline-block bg-green-200 text-black text-sm font-semibold px-3 py-2 rounded-md";
+
+        const cardObject = { 
+            jobId, 
+            company, 
+            jobTitle, 
+            location, 
+            duration, 
+            salary, 
+            description, 
+            status: "Interview" 
+        };
+
+        // check by jobId
+        const exist = interviewList.find(item => item.jobId === jobId);
+        if (!exist) {
             interviewList.push(cardObject);
-            createInterviewRender()
+            createInterviewRender();
             calculateCount();
-            // push the cardObject to the inteviewList
+        } else {
+            alert("Already in Interview List!");
         }
-        else{
-            alert("sorry already exist")
+    }
+
+    // get the rejected btn
+    if (event.target.classList.contains("rejected-btn")) {
+        status.innerText = "Rejected";
+        status.className = "job-status inline-block bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-md";
+
+        const cardObject = { 
+             jobId,
+             company, 
+             jobTitle, 
+             location, 
+             duration, 
+             salary, 
+             description, 
+             status: "Rejected" 
+        
+        };
+
+        // check by jobId
+        const exist = rejectedList.find(item => item.jobId === jobId);
+        if (!exist) {
+            rejectedList.push(cardObject);
+            createRejectedRender();
+            calculateCount();
+        } else {
+            alert("Already in Rejected List!");
         }
-}
-})
+    }
+});
 
 
 
-// html file create render for keeping the cards in the filtered section
+// html file create render for keeping the cards in the filtered interview section
 function createInterviewRender(){
     // initially nothing here
-    filteredCardSection.innerHTML = "";
+    filteredInterviewCardSection.innerHTML = "";
     for(let interview of interviewList){
         console.log(interview);
 
         let card = document.createElement("div")
         card.innerHTML =  `
-        <div class="w-11/12 mx-auto bg-red-300 rounded-xl shadow-md p-6 border border-gray-200 relative">
+        <div class="bg-green-50 rounded-xl shadow-md p-6 border border-gray-200 relative">
         
         <!-- delete icon -->
         <button class="btn btn-circle absolute top-4 right-4 text-gray-400 hover:text-gray-700">
@@ -147,7 +187,7 @@ function createInterviewRender(){
         </ul>
 
         <!-- Status -->
-        <span class="job-status inline-block bg-gray-200 text-gray-600 text-xs font-semibold px-3 py-2 rounded-md mt-3">${interview.status}</span>
+        <span class="job-status inline-block bg-green-200 text-black text-sm font-semibold px-3 py-2 rounded-md">${interview.status}</span>
 
         <!-- Description -->
         <p class="description text-sm text-gray-600 mt-3">${interview.description}</p>
@@ -165,8 +205,60 @@ function createInterviewRender(){
     </div>
         `
 
-        // append child the div tho the filteredCardSection
-    filteredCardSection.appendChild(card)
+        // append child the div tho the filteredInterviewCardSection
+    filteredInterviewCardSection.appendChild(card)
+
+    }
+    }
+
+// html file create render for keeping the cards in the filtered Rejected section
+function createRejectedRender(){
+    // initially nothing here
+    filteredRejectedCardSection.innerHTML = "";
+    for(let reject of rejectedList){
+        console.log(reject);
+
+        let card = document.createElement("div")
+        card.innerHTML =  `
+        <div class="bg-red-50 rounded-xl shadow-md p-6 border border-gray-200 relative">
+        
+        <!-- delete icon -->
+        <button class="btn btn-circle absolute top-4 right-4 text-gray-400 hover:text-gray-700">
+        <i class="fa-solid fa-trash-can"></i>
+        </button>
+        
+        <!-- Job Name -->
+        <h2 class="company text-lg font-semibold text-[#002C5C]">${reject.company}</h2>
+        <p class="job-title text-sm font-bold text-gray-500">${reject.jobTitle}</p>
+
+        <!-- location and Salary -->
+        <ul class="font-medium text-sm text-gray-500 my-4 flex gap-8">
+            <li class="location">${reject.location}</li>
+            <li class="duration list-disc">${reject.duration}</li>
+            <li class="salary list-disc">${reject.salary}</li>
+        </ul>
+
+        <!-- Status -->
+        <span class="job-status inline-block bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-md">${reject.status}</span>
+
+        <!-- Description -->
+        <p class="description text-sm text-gray-600 mt-3">${reject.description}</p>
+
+        <!-- Buttons -->
+        <div class="flex gap-3 mt-4">
+        <button class="interview-btn border border-green-500 text-green-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-50">
+            INTERVIEW
+        </button>
+
+        <button class="rejected-btn border border-red-500 text-red-600 px-4 py-1 rounded-md text-sm font-semibold hover:bg-red-50">
+            REJECTED
+        </button>
+        </div>
+    </div>
+        `
+
+        // append child the div tho the filteredInterviewCardSection
+    filteredRejectedCardSection.appendChild(card)
 
     }
     }
