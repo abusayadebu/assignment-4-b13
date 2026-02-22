@@ -12,16 +12,68 @@ let allJobCards = document.getElementById("all-job-cards")
 
 // catch the filteredCardSection
 const filteredCardSection = document.getElementById("filteredCardSection")
+// no-card section catch
+const noCardSection = document.getElementById("no-card-section")
+let totalJobs = document.getElementById("total-jobs")
+
+// catch filter buttons
+const allFilterBtn = document.getElementById("all-filter-btn")
+const interviewFilterBtn = document.getElementById("interview-filter-btn")
+const rejectedFilterBtn = document.getElementById("rejected-filter-btn")
 
 
 
-// function calculate count
+
+// function calculate count -1
 function calculateCount(){
     totalCount.innerText = allJobCards.children.length;
     interviewCount.innerText = interviewList.length;
     rejectedCount.innerText = rejectedList.length;
 }
 calculateCount();
+
+
+// toggle filterBtn function -2
+function toggleFilterBtn(id){
+    allFilterBtn.classList.remove("bg-blue-600", "text-white")
+    interviewFilterBtn.classList.remove("bg-blue-600", "text-white")
+    rejectedFilterBtn.classList.remove("bg-blue-600", "text-white")
+    
+    // which is selected-- 
+    const selectedBtn = document.getElementById(id)
+    if(selectedBtn){
+        selectedBtn.classList.add("bg-blue-600", "text-white")
+    }
+    if(id == "all-filter-btn"){
+        // hide interview cards
+        filteredCardSection.classList.add("hidden")
+        allJobCards.classList.remove("hidden")
+        totalJobs.innerText = `${allJobCards.children.length} jobs`;
+
+    }
+
+    // interview filter btn show the interview cards
+    if(id == "interview-filter-btn"){
+        // hide all jobs container
+        allJobCards.classList.add("hidden")
+        
+        // if interviewList.length 0, then show no interview
+        if(interviewList.length == 0){
+            noCardSection.classList.remove("hidden")
+            // initially interview 0
+            totalJobs.innerText = `${interviewList.length} of ${allJobCards.children.length} Jobs`;
+        }
+        else if(interviewList.length > 0){
+            noCardSection.classList.add("hidden")
+             // show filterd card section
+        filteredCardSection.classList.remove("hidden")
+        // initially interview 0
+        totalJobs.innerText = `${interviewList.length} of ${allJobCards.children.length} Jobs`;
+        }
+       
+    }
+    
+}
 
 
 // event deligate and catch the event
@@ -37,6 +89,7 @@ allJobCards.addEventListener("click", function(event){
         const salary = parentNode.querySelector(".salary").innerText;
         let status = parentNode.querySelector(".job-status").innerText;
         const description = parentNode.querySelector(".description").innerText;
+        const jobStatus = "Applied"
 
         // make object
         const cardObject = {
@@ -44,20 +97,24 @@ allJobCards.addEventListener("click", function(event){
             jobTitle: jobTitle,
             location: location,
             duration: duration,
-            status: status,
+            salary: salary,
+            status: jobStatus,
             description: description,
         }
         console.log(cardObject);
-        // need some work here need check
+        // check already job object exsit or not
+        const interviewExist = interviewList.find(item => item.company == cardObject.company)
 
-        // push the cardObject to the inteviewList
-        interviewList.push(cardObject);
-        createInterviewRender()
-        calculateCount();
-    }
-    else{
-        alert('sorry not it')
-    }
+        if(!interviewExist){
+            interviewList.push(cardObject);
+            createInterviewRender()
+            calculateCount();
+            // push the cardObject to the inteviewList
+        }
+        else{
+            alert("sorry already exist")
+        }
+}
 })
 
 
