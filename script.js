@@ -85,13 +85,26 @@ function toggleFilterBtn(id){
     
 }
 
+// get current visible tab
+function getCurrentVisibleSection(){
+    if(!allJobCards.classList.contains("hidden")){
+         return allJobCards;
+    }
+    if(!filteredInterviewCardSection.classList.contains("hidden")){
+        return filteredInterviewCardSection;
+    }
+    if(!filteredRejectedCardSection.classList.contains("hidden")) {
+        return filteredRejectedCardSection;
+    }
+    return null;
+}
 
 // event deligate and catch the event
-allJobCards.addEventListener("click", function(event) {
-    const parentNode = event.target.closest(".bg-white");
+function handleCardClick(event) {
+    const parentNode = event.target.closest(".bg-white, .bg-green-50, .bg-red-50");
     if (!parentNode) return;
 
-    const jobId = parentNode.id; // unique ID of the card
+    const jobId = parentNode.id;
 
     const status = parentNode.querySelector(".job-status");
     const company = parentNode.querySelector(".company").innerText;
@@ -100,6 +113,8 @@ allJobCards.addEventListener("click", function(event) {
     const duration = parentNode.querySelector(".duration").innerText;
     const salary = parentNode.querySelector(".salary").innerText;
     const description = parentNode.querySelector(".description").innerText;
+
+    const currentTabSection = getCurrentVisibleSection();
 
     // get the interview btn
     if (event.target.classList.contains("interview-btn")) {
@@ -155,9 +170,12 @@ allJobCards.addEventListener("click", function(event) {
             alert("Already in Rejected List!");
         }
     }
-});
+};
 
-
+// attach event delegation to all sections
+allJobCards.addEventListener("click", handleCardClick);
+filteredInterviewCardSection.addEventListener("click", handleCardClick);
+filteredRejectedCardSection.addEventListener("click", handleCardClick);
 
 // html file create render for keeping the cards in the filtered interview section
 function createInterviewRender(){
