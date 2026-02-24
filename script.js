@@ -116,6 +116,28 @@ function handleCardClick(event) {
 
     const currentTabSection = getCurrentVisibleSection();
 
+
+
+    // Delete Button
+    if(event.target.closest(".delete")){
+        // remove from current tab DOM
+        if(currentTabSection && currentTabSection.contains(parentNode)){
+             parentNode.remove();
+        }
+
+        // remove from lists
+        interviewList = interviewList.filter(item => item.jobId !== jobId);
+        rejectedList = rejectedList.filter(item => item.jobId !== jobId);
+
+        // render filtered sections
+        createInterviewRender();
+        createRejectedRender();
+
+        // update counts
+        calculateCount();
+        return;
+    }
+
     // get the interview btn
     if (event.target.classList.contains("interview-btn")) {
         status.innerText = "Interview";
