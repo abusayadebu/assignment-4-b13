@@ -132,15 +132,26 @@ function handleCardClick(event) {
             status: "Interview" 
         };
 
-        // check by jobId
-        const exist = interviewList.find(item => item.jobId === jobId);
-        if (!exist) {
-            interviewList.push(cardObject);
-            createInterviewRender();
-            calculateCount();
-        } else {
-            alert("Already in Interview List!");
+        // Remove only from current tab
+        if(currentTabSection && currentTabSection.contains(parentNode)) {
+            parentNode.remove();
         }
+
+        // Remove from rejectedList if there have
+        rejectedList = rejectedList.filter(item => item.jobId !== jobId);
+
+        //Remove from interviewList if exists
+        interviewList = interviewList.filter(item => item.jobId !== jobId);
+
+        // add to interviewList
+        interviewList.push(cardObject);
+
+        // re-render filtered sections
+        createInterviewRender();
+        createRejectedRender();
+
+        // update counts
+        calculateCount();
     }
 
     // get the rejected btn
@@ -160,15 +171,24 @@ function handleCardClick(event) {
         
         };
 
-        // check by jobId
-        const exist = rejectedList.find(item => item.jobId === jobId);
-        if (!exist) {
-            rejectedList.push(cardObject);
-            createRejectedRender();
-            calculateCount();
-        } else {
-            alert("Already in Rejected List!");
-        }
+         // Remove only from current tab
+        if(currentTabSection && currentTabSection.contains(parentNode)) parentNode.remove();
+
+        // Remove from interviewList if present
+        interviewList = interviewList.filter(item => item.jobId !== jobId);
+
+        // Remove from rejectedList if exists
+        rejectedList = rejectedList.filter(item => item.jobId !== jobId);
+
+        // add to rejectedList
+        rejectedList.push(cardObject);
+
+        // re-render filtered sections
+        createInterviewRender();
+        createRejectedRender();
+
+        // update counts
+        calculateCount();
     }
 };
 
