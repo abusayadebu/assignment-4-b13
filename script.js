@@ -100,19 +100,18 @@ function getCurrentVisibleSection(){
 }
 
 // event deligate and catch the event
-function handleCardClick(event) {
-    const parentNode = event.target.closest(".bg-white, .bg-green-50, .bg-red-50");
-    if (!parentNode) return;
+function handleCardClick(event){
+    const parentCard = event.target.closest(".bg-white, .bg-green-50, .bg-red-50");
+    if(!parentCard) return;
 
-    const jobId = parentNode.id;
-
-    const status = parentNode.querySelector(".job-status");
-    const company = parentNode.querySelector(".company").innerText;
-    const jobTitle = parentNode.querySelector(".job-title").innerText;
-    const location = parentNode.querySelector(".location").innerText;
-    const duration = parentNode.querySelector(".duration").innerText;
-    const salary = parentNode.querySelector(".salary").innerText;
-    const description = parentNode.querySelector(".description").innerText;
+    const jobId = parentCard.id;
+    const statusEl = parentCard.querySelector(".job-status");
+    const company = parentCard.querySelector(".company").innerText;
+    const jobTitle = parentCard.querySelector(".job-title").innerText;
+    const location = parentCard.querySelector(".location").innerText;
+    const duration = parentCard.querySelector(".duration").innerText;
+    const salary = parentCard.querySelector(".salary").innerText;
+    const description = parentCard.querySelector(".description").innerText;
 
     const currentTabSection = getCurrentVisibleSection();
 
@@ -121,8 +120,8 @@ function handleCardClick(event) {
     // Delete Button
     if(event.target.closest(".delete")){
         // remove from current tab DOM
-        if(currentTabSection && currentTabSection.contains(parentNode)){
-             parentNode.remove();
+        if(currentTabSection && currentTabSection.contains(parentCard)){
+             parentCard.remove();
         }
 
         // remove from lists
@@ -138,25 +137,17 @@ function handleCardClick(event) {
         return;
     }
 
-    // get the interview btn
-    if (event.target.classList.contains("interview-btn")) {
-        status.innerText = "Interview";
-        status.className = "job-status inline-block bg-green-200 text-black text-sm font-semibold px-3 py-2 rounded-md";
 
-        const cardObject = { 
-            jobId, 
-            company, 
-            jobTitle, 
-            location, 
-            duration, 
-            salary, 
-            description, 
-            status: "Interview" 
-        };
+    // Interview Button
+    if(event.target.classList.contains("interview-btn")){
+        statusEl.innerText = "Interview";
+        statusEl.className = "job-status inline-block bg-green-200 text-black text-sm font-semibold px-3 py-2 rounded-md";
+
+        const cardObj = {jobId, company, jobTitle, location, duration, salary, description, status: "Interview"};
 
         // Remove only from current tab
-        if(currentTabSection && currentTabSection.contains(parentNode)) {
-            parentNode.remove();
+        if(currentTabSection && currentTabSection.contains(parentCard)) {
+            parentCard.remove();
         }
 
         // Remove from rejectedList if there have
@@ -166,7 +157,7 @@ function handleCardClick(event) {
         interviewList = interviewList.filter(item => item.jobId !== jobId);
 
         // add to interviewList
-        interviewList.push(cardObject);
+        interviewList.push(cardObj);
 
         // re-render filtered sections
         createInterviewRender();
@@ -176,25 +167,16 @@ function handleCardClick(event) {
         calculateCount();
     }
 
-    // get the rejected btn
-    if (event.target.classList.contains("rejected-btn")) {
-        status.innerText = "Rejected";
-        status.className = "job-status inline-block bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-md";
+    // Rejected Button
 
-        const cardObject = { 
-             jobId,
-             company, 
-             jobTitle, 
-             location, 
-             duration, 
-             salary, 
-             description, 
-             status: "Rejected" 
-        
-        };
+    if(event.target.classList.contains("rejected-btn")){
+        statusEl.innerText = "Rejected";
+        statusEl.className = "job-status inline-block bg-red-500 text-white text-xs font-semibold px-3 py-2 rounded-md";
 
-         // Remove only from current tab
-        if(currentTabSection && currentTabSection.contains(parentNode)) parentNode.remove();
+        const cardObj = {jobId, company, jobTitle, location, duration, salary, description, status: "Rejected"};
+
+        // Remove only from current tab
+        if(currentTabSection && currentTabSection.contains(parentCard)) parentCard.remove();
 
         // Remove from interviewList if present
         interviewList = interviewList.filter(item => item.jobId !== jobId);
@@ -203,7 +185,7 @@ function handleCardClick(event) {
         rejectedList = rejectedList.filter(item => item.jobId !== jobId);
 
         // add to rejectedList
-        rejectedList.push(cardObject);
+        rejectedList.push(cardObj);
 
         // re-render filtered sections
         createInterviewRender();
@@ -212,7 +194,7 @@ function handleCardClick(event) {
         // update counts
         calculateCount();
     }
-};
+}
 
 // attach event delegation to all sections
 allJobCards.addEventListener("click", handleCardClick);
@@ -228,7 +210,7 @@ function createInterviewRender(){
 
         let card = document.createElement("div")
         card.innerHTML =  `
-        <div class="bg-green-50 rounded-xl shadow-md p-6 border border-gray-200 relative">
+        <div class="bg-green-50 rounded-xl shadow-md p-6 border border-gray-200 relative"  id="${interview.jobId}">
         
         <!-- delete icon -->
         <button class="btn btn-circle absolute top-4 right-4 text-gray-400 hover:text-gray-700">
@@ -280,7 +262,7 @@ function createRejectedRender(){
 
         let card = document.createElement("div")
         card.innerHTML =  `
-        <div class="bg-red-50 rounded-xl shadow-md p-6 border border-gray-200 relative">
+        <div class="bg-red-50 rounded-xl shadow-md p-6 border border-gray-200 relative" id="${reject.jobId}">
         
         <!-- delete icon -->
         <button class="btn btn-circle absolute top-4 right-4 text-gray-400 hover:text-gray-700">
